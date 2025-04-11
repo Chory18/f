@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const navigate = useNavigate();
-    const [form, setForm] = useState({ email: '', full_name: '', password: '' });
+    const [form, setForm] = useState({ correo: '', nombre: '', contraseña: '' });
     const [error, setError] = useState('');
 
     const handleChange = (e) => {
@@ -14,7 +14,7 @@ const Register = () => {
         e.preventDefault();
         setError('');
         try {
-            const res = await fetch('https://tu-ip-publica-ec2/users/', {
+            const res = await fetch('https://52.23.173.32/users/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form),
@@ -38,26 +38,26 @@ const Register = () => {
             <form onSubmit={handleSubmit}>
                 <input
                     type="email"
-                    name="email"
+                    name="correo"
                     placeholder="Correo electrónico"
-                    value={form.email}
+                    value={form.correo}
                     onChange={handleChange}
                     required
                     style={{ display: 'block', width: '100%', marginBottom: 10 }}
                 />
                 <input
                     type="text"
-                    name="full_name"
+                    name="nombre"
                     placeholder="Nombre completo"
-                    value={form.full_name}
+                    value={form.nombre}
                     onChange={handleChange}
                     style={{ display: 'block', width: '100%', marginBottom: 10 }}
                 />
                 <input
                     type="password"
-                    name="password"
+                    name="contraseña"
                     placeholder="Contraseña"
-                    value={form.password}
+                    value={form.contraseña}
                     onChange={handleChange}
                     required
                     style={{ display: 'block', width: '100%', marginBottom: 10 }}
