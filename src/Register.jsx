@@ -14,7 +14,7 @@ const Register = () => {
         e.preventDefault();
         setError('');
         try {
-            const res = await fetch('https://52.23.173.32/users/', {
+            const res = await fetch('http://52.23.173.32/users/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form),
