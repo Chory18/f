@@ -53,7 +53,7 @@ const Users = () => {
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
-                        <th>Email</th>
+                        <th>Correo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -61,8 +61,8 @@ const Users = () => {
                     {users.map((u) => (
                         <tr key={u.id}>
                             <td>{u.id}</td>
-                            <td>{u.full_name}</td>
-                            <td>{u.email}</td>
+                            <td>{u.nombre}</td>
+                            <td>{u.correo}</td>
                             <td>
                                 <button onClick={() => navigate(`/users/${u.id}/edit`)}>Editar</button>{' '}
                                 <button onClick={() => handleDelete(u.id)}>Eliminar</button>

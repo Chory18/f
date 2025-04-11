@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchWithToken } from './apiAuth';
 
 const UserForm = () => {
-    const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [contraseña, setContraseña] = useState('');
     const { id } = useParams();
     const navigate = useNavigate();
     const isEditing = Boolean(id);
@@ -19,8 +19,8 @@ const UserForm = () => {
     const fetchUser = async () => {
         try {
             const data = await fetchWithToken(`/users/${id}`);
-            setFullName(data.full_name);
-            setEmail(data.email);
+            setNombre(data.nombre);
+            setCorreo(data.correo);
         } catch (err) {
             console.error('Error al cargar usuario', err);
         }
@@ -28,8 +28,8 @@ const UserForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const payload = { full_name: fullName, email };
-        if (!isEditing) payload.password = password;
+        const payload = { nombre, correo };
+        if (!isEditing) payload.contraseña = contraseña;
 
         try {
             if (isEditing) {
@@ -59,18 +59,18 @@ const UserForm = () => {
                     <label>Nombre completo:</label>
                     <input
                         type="text"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
                         required
                         style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
                     />
                 </div>
                 <div>
-                    <label>Email:</label>
+                    <label>Correo:</label>
                     <input
                         type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={correo}
+                        onChange={(e) => setCorreo(e.target.value)}
                         required
                         style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
                     />
@@ -80,8 +80,8 @@ const UserForm = () => {
                         <label>Contraseña:</label>
                         <input
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={contraseña}
+                            onChange={(e) => setContraseña(e.target.value)}
                             required
                             style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
                         />

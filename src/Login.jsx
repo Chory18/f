@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from './apiAuth';
+import { login } from './apiAuth'; // Asegúrate de que esta ruta es correcta
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [contraseña, setContraseña] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -12,14 +12,14 @@ const Login = () => {
         e.preventDefault();
         setError('');
 
-        if (!email || !password) {
-            setError('Email y contraseña son requeridos');
+        if (!correo || !contraseña) {
+            setError('Correo y contraseña son requeridos');
             return;
         }
 
         try {
-            await login(email, password);
-            navigate('/users');
+            await login(correo, contraseña);
+            navigate('/users'); // Redirige a la ruta de usuarios
         } catch (err) {
             setError('Credenciales inválidas');
         }
@@ -31,11 +31,11 @@ const Login = () => {
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Email:</label>
+                    <label>Correo:</label>
                     <input
                         type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={correo}
+                        onChange={(e) => setCorreo(e.target.value)}
                         required
                         style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
                     />
@@ -44,8 +44,8 @@ const Login = () => {
                     <label>Contraseña:</label>
                     <input
                         type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={contraseña}
+                        onChange={(e) => setContraseña(e.target.value)}
                         required
                         style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
                     />
