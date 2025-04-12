@@ -13,7 +13,9 @@ export const register = async (correo, contraseña, nombre) => {
             nombre,
         }),
     });
-
+   agent: new https.Agent({  
+        rejectUnauthorized: false  
+    })
     if (!response.ok) {
         const error = await response.json();
         throw error;
