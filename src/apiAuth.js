@@ -31,15 +31,16 @@ export const register = async (correo, contraseña, nombre) => {
   }
 };
 
+// 🔐 Iniciar sesión
 export const login = async (correo, contraseña) => {
-    const response = await fetch('https://52.23.173.32:8000/token', {
+    const response = await fetch(`${API_BASE_URL}/token`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-            username: correo,       // 👈 IMPORTANTE: aunque es el correo, FastAPI espera "username"
-            password: contraseña,   // 👈 este nombre sí está bien
+            username: correo,       // FastAPI espera "username"
+            password: contraseña,
         }),
     });
 
@@ -53,40 +54,41 @@ export const login = async (correo, contraseña) => {
     localStorage.setItem('token', data.access_token);
     return data;
 };
-// Función para hacer peticiones autenticadas
+
+// 📡 Peticiones autenticadas con token
 export const fetchWithToken = async (endpoint, options = {}) => {
-  const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(token && { Authorization: `Bearer ${token}` }),
-    ...options.headers,
-  };
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...options.headers,
+    };
 
-  const config = {
-    ...options,
-    headers,
-  };
+    const config = {
+        ...options,
+        headers,
+    };
 
-  try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || 'Error en la solicitud');
+    try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Error en la solicitud');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error en fetchWithToken:', error);
+        throw error;
     }
-    return await response.json();
-  } catch (error) {
-    console.error('Error en fetchWithToken:', error);
-    throw error;
-  }
 };
 
-// Cerrar sesión
+// 🚪 Cerrar sesión
 export const logout = () => {
-  localStorage.removeItem('token');
+    localStorage.removeItem('token');
 };
 
-// Verificar si el usuario está autenticado
+// 🔍 Verificar si el usuario está autenticado
 export const isAuthenticated = () => {
-  return localStorage.getItem('token') !== null;
+    return localStorage.getItem('token') !== null;
 };
