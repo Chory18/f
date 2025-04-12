@@ -31,6 +31,7 @@ export const register = async (correo, contraseña, nombre) => {
   }
 };
 
+// Función de login
 export const login = async (correo, contraseña) => {
   try {
     const response = await fetch(`${API_BASE_URL}/token`, {
@@ -46,15 +47,16 @@ export const login = async (correo, contraseña) => {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.detail || 'Error en el login');
+      // Lanzamos un error con detalles más claros
+      throw new Error(JSON.stringify(error)); // Convertimos el error a una cadena legible
     }
 
     const data = await response.json();
     localStorage.setItem('token', data.access_token);
     return data;
   } catch (error) {
-    console.error('Error en login:', error);
-    throw error;
+    console.error('Error en login:', error); // Imprimimos el error completo
+    throw error; // Lanza el error para que el frontend lo maneje
   }
 };
 // Función para hacer peticiones autenticadas
