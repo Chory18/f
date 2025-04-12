@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { fetchWithToken } from './apiAuth';
 
 const UserForm = () => {
     const [nombre, setNombre] = useState('');
@@ -9,6 +10,7 @@ const UserForm = () => {
     const navigate = useNavigate();
     const isEditing = Boolean(id);
 
+    // Cargar los datos del usuario si estamos en modo de edición
     useEffect(() => {
         if (isEditing) {
             fetchUser();
@@ -17,17 +19,11 @@ const UserForm = () => {
 
     const fetchUser = async () => {
         try {
-            const response = await fetch(`https://52.23.173.32:8000/usuarios/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            const data = await response.json();
+            const data = await fetchWithToken(https://52.23.173.32:8000/usuarios/${id}); // URL completa
             setNombre(data.nombre);
             setCorreo(data.correo);
         } catch (err) {
             console.error('Error al cargar usuario', err);
-            alert('Error al cargar los datos del usuario.');
         }
     };
 
@@ -37,33 +33,24 @@ const UserForm = () => {
         if (!isEditing) payload.contraseña = contraseña;
 
         try {
-            const url = isEditing
-                ? `https://52.23.173.32:8000/usuarios/${id}`
-                : 'https://52.23.173.32:8000/usuarios';
-
-            const method = isEditing ? 'PUT' : 'POST';
-
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-                body: JSON.stringify(payload),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                console.error('Respuesta del backend:', data);
-                alert(`Error: ${data.detail || 'Error desconocido'}`);
-                return;
+            if (isEditing) {
+                // Actualizar usuario
+                await fetchWithToken(https://52.23.173.32:8000/usuarios/${id}, {
+                    method: 'PUT',
+                    body: JSON.stringify(payload),
+                    headers: { 'Content-Type': 'application/json' },
+                });
+            } else {
+                // Crear nuevo usuario
+                await fetchWithToken('https://52.23.173.32:8000/usuarios', {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    headers: { 'Content-Type': 'application/json' },
+                });
             }
-
             navigate('/users');
         } catch (err) {
             console.error('Error al guardar', err);
-            alert('Error inesperado al guardar.');
         }
     };
 
