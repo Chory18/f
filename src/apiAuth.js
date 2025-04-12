@@ -32,7 +32,7 @@ export const register = async (correo, contraseña, nombre) => {
 };
 
 export const login = async (correo, contraseña) => {
-    const response = await fetch('https://52.23.173.32/token', {
+    const response = await fetch('https://52.23.173.32:8000/token', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
