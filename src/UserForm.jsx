@@ -19,7 +19,7 @@ const UserForm = () => {
 
     const fetchUser = async () => {
         try {
-            const data = await fetchWithToken(https://52.23.173.32:8000/usuarios/${id}); // URL completa
+            const data = await fetchWithToken(`https://52.23.173.32:8000/usuarios/${id}`); // ✅ URL corregida
             setNombre(data.nombre);
             setCorreo(data.correo);
         } catch (err) {
@@ -35,7 +35,7 @@ const UserForm = () => {
         try {
             if (isEditing) {
                 // Actualizar usuario
-                await fetchWithToken(https://52.23.173.32:8000/usuarios/${id}, {
+                await fetchWithToken(`https://52.23.173.32:8000/usuarios/${id}`, {
                     method: 'PUT',
                     body: JSON.stringify(payload),
                     headers: { 'Content-Type': 'application/json' },
