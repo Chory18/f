@@ -16,7 +16,7 @@ const Users = () => {
 
     const fetchUsers = async () => {
         try {
-            const data = await fetchWithToken('/users');
+            const data = await fetchWithToken('/usuarios'); // Corregido para coincidir con la ruta de FastAPI
             setUsers(data);
         } catch (err) {
             console.error('Error al cargar usuarios', err);
@@ -27,7 +27,7 @@ const Users = () => {
         if (!window.confirm('¿Seguro que deseas eliminar este usuario?')) return;
 
         try {
-            await fetchWithToken(`/users/${id}`, { method: 'DELETE' });
+            await fetchWithToken(`/usuarios/${id}`, { method: 'DELETE' }); // Corregido para coincidir con la ruta de FastAPI
             fetchUsers();
         } catch (err) {
             console.error('Error al eliminar', err);
