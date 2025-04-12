@@ -3,15 +3,15 @@ const API_BASE_URL = 'https://52.23.173.32:8000'; // Asegúrate de que sea HTTPS
 // Función de registro
 export const register = async (correo, contraseña, nombre) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/usuarios`, {
+    const response = await fetch(`${API_BASE_URL}/usuarios/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: correo,
-        password: contraseña,
-        name: nombre
+        correo: correo,   // Cambié "email" por "correo"
+        contraseña: contraseña,
+        nombre: nombre    // Cambié "name" por "nombre"
       }),
       // Opción para desarrollo que ignora errores de certificado
       // ⚠️ Eliminar esto en producción
