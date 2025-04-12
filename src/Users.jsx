@@ -4,6 +4,7 @@ import { fetchWithToken, logout, isAuthenticated } from './apiAuth';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
+    const [error, setError] = useState(null); // Para capturar errores
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,10 +17,13 @@ const Users = () => {
 
     const fetchUsers = async () => {
         try {
-            const data = await fetchWithToken('/usuarios'); // Corregido para coincidir con la ruta de FastAPI
-            setUsers(data);
+            const data = await fetchWithToken('/usuarios'); // Asegúrate de que esta ruta sea la correcta
+            if (data) {
+                setUsers(data);
+            }
         } catch (err) {
             console.error('Error al cargar usuarios', err);
+            setError('Hubo un error al cargar los usuarios'); // Mensaje de error
         }
     };
 
@@ -27,10 +31,11 @@ const Users = () => {
         if (!window.confirm('¿Seguro que deseas eliminar este usuario?')) return;
 
         try {
-            await fetchWithToken(`/usuarios/${id}`, { method: 'DELETE' }); // Corregido para coincidir con la ruta de FastAPI
+            await fetchWithToken(`/usuarios/${id}`, { method: 'DELETE' });
             fetchUsers();
         } catch (err) {
             console.error('Error al eliminar', err);
+            setError('Hubo un error al eliminar el usuario');
         }
     };
 
@@ -42,6 +47,7 @@ const Users = () => {
     return (
         <div style={{ maxWidth: '800px', margin: '50px auto' }}>
             <h2>Lista de Usuarios</h2>
+            {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>} {/* Mostrar mensaje de error */}
             <div style={{ marginBottom: '20px' }}>
                 <button onClick={() => navigate('/users/new')} style={{ marginRight: '10px' }}>
                     Crear Usuario
@@ -58,17 +64,25 @@ const Users = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((u) => (
-                        <tr key={u.id}>
-                            <td>{u.id}</td>
-                            <td>{u.nombre}</td>
-                            <td>{u.correo}</td>
-                            <td>
-                                <button onClick={() => navigate(`/users/${u.id}/edit`)}>Editar</button>{' '}
-                                <button onClick={() => handleDelete(u.id)}>Eliminar</button>
+                    {users.length > 0 ? (
+                        users.map((u) => (
+                            <tr key={u.id}>
+                                <td>{u.id}</td>
+                                <td>{u.nombre}</td>
+                                <td>{u.correo}</td>
+                                <td>
+                                    <button onClick={() => navigate(`/users/${u.id}/edit`)}>Editar</button>{' '}
+                                    <button onClick={() => handleDelete(u.id)}>Eliminar</button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="4" style={{ textAlign: 'center' }}>
+                                No hay usuarios disponibles.
                             </td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
         </div>
