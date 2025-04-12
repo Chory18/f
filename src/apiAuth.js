@@ -3,7 +3,7 @@ const API_BASE_URL = 'https://52.23.173.32:8000'; // Asegúrate de que sea HTTPS
 // Función de registro
 export const register = async (correo, contraseña, nombre) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/register`, {
+    const response = await fetch(`${API_BASE_URL}/usuarios`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
