@@ -2,24 +2,34 @@ const API_BASE_URL = 'https://52.23.173.32'; // Asegúrate de que sea HTTPS vál
 
 // Función de registro
 export const register = async (correo, contraseña, nombre) => {
-    const response = await fetch(`${API_BASE_URL}/register`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            correo,
-            contraseña,
-            nombre,
-        }),
+  try {
+    const response = await fetch('https://52.23.173.32/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: correo,
+        password: contraseña,
+        name: nombre
+      }),
+      // Opción para desarrollo que ignora errores de certificado
+      // ⚠️ Eliminar esto en producción
+      mode: 'cors', // Necesario si el backend tiene CORS habilitado
+      credentials: 'include' // Si usas cookies/sesiones
     });
 
     if (!response.ok) {
-        const error = await response.json();
-        throw error;
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Error en el registro');
     }
 
-    return response.json();
+    return await response.json();
+  } catch (error) {
+    console.error('Error en register:', error);
+    throw error;
+  }
+};
 };
 
 // Función de login
