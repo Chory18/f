@@ -56,32 +56,23 @@ export const login = async (correo, contraseña) => {
 };
 
 // 📡 Peticiones autenticadas con token
-export const fetchWithToken = async (endpoint, options = {}) => {
-    const token = localStorage.getItem('token');
-
-    const headers = {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }), // Agrega el token al header si está presente
-        ...options.headers,
-    };
-
-    const config = {
+export const fetchWithToken = async (url, options = {}) => {
+    const token = localStorage.getItem('token'); // Asegúrate de que el token esté en localStorage
+    const response = await fetch(url, {
         ...options,
-        headers,
-    };
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            ...options.headers,
+        },
+    });
 
-    try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail || 'Error en la solicitud');
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Error en fetchWithToken:', error);
-        throw error;
+    if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
     }
+
+    return await response.json();
 };
+
 
 // 🚪 Cerrar sesión
 export const logout = () => {
