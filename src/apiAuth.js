@@ -31,33 +31,27 @@ export const register = async (correo, contraseña, nombre) => {
   }
 };
 
-// Función de login
 export const login = async (correo, contraseña) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/token`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: correo, // Enviamos 'username' en lugar de 'email'
-        password: contraseña, // Enviamos 'password' en lugar de 'contraseña'
-      }),
+    const response = await fetch('https://TU_BACKEND/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            username: correo,       // 👈 IMPORTANTE: aunque es el correo, FastAPI espera "username"
+            password: contraseña,   // 👈 este nombre sí está bien
+        }),
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      // Lanzamos un error con detalles más claros
-      throw new Error(JSON.stringify(error)); // Convertimos el error a una cadena legible
+        const errorData = await response.json();
+        console.error("Error en login:", errorData);
+        throw new Error(errorData.detail || "Error desconocido");
     }
 
     const data = await response.json();
     localStorage.setItem('token', data.access_token);
     return data;
-  } catch (error) {
-    console.error('Error en login:', error); // Imprimimos el error completo
-    throw error; // Lanza el error para que el frontend lo maneje
-  }
 };
 // Función para hacer peticiones autenticadas
 export const fetchWithToken = async (endpoint, options = {}) => {
