@@ -18,9 +18,11 @@ const Login = () => {
         }
 
         try {
-            await login(correo, contraseña);
+            const response = await login(correo, contraseña); // Aquí estamos llamando a la función 'login'
+            // Si la respuesta es exitosa, redirigimos
             navigate('/users'); // Redirige a la ruta de usuarios
         } catch (err) {
+            console.error('Error de login:', err); // Verifica el contenido del error
             setError('Credenciales inválidas');
         }
     };
