@@ -10,7 +10,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setError(''); // Limpiar errores anteriores
 
         if (!correo || !contraseña) {
             setError('Correo y contraseña son requeridos');
@@ -22,8 +22,8 @@ const Login = () => {
             // Si la respuesta es exitosa, redirigimos
             navigate('/users'); // Redirige a la ruta de usuarios
         } catch (err) {
-            console.error('Error de login:', err); // Verifica el contenido del error
-            setError('Credenciales inválidas');
+            // Aquí mostramos el error de manera comprensible
+            setError(`Error de login: ${err.message}`); // Mostramos el mensaje de error
         }
     };
 
