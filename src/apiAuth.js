@@ -1,3 +1,5 @@
+import https from 'https';
+
 const API_BASE_URL = 'https://52.23.173.32'; // Asegúrate de que sea HTTPS válido
 
 // Función de registro
