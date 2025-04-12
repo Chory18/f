@@ -7,41 +7,45 @@ const Users = () => {
     const [error, setError] = useState(null); // Para capturar errores
     const navigate = useNavigate();
 
+    // Cargar usuarios al montar el componente
     useEffect(() => {
         if (!isAuthenticated()) {
-            navigate('/login');
+            navigate('/login'); // Si no está autenticado, redirigir a login
         } else {
             fetchUsers();
         }
     }, [navigate]);
 
+    // Obtener lista de usuarios desde la API
     const fetchUsers = async () => {
         try {
-            const data = await fetchWithToken('/usuarios'); // Asegúrate de que esta ruta sea la correcta
+            const data = await fetchWithToken('https://52.23.173.32:8000/usuarios'); // Asegúrate de que esta ruta sea correcta
             if (data) {
-                setUsers(data);
+                setUsers(data); // Asignar usuarios a estado
             }
         } catch (err) {
-            console.error('Error al cargar usuarios', err);
+            console.error('Error al cargar usuarios:', err);
             setError('Hubo un error al cargar los usuarios'); // Mensaje de error
         }
     };
 
+    // Eliminar usuario
     const handleDelete = async (id) => {
         if (!window.confirm('¿Seguro que deseas eliminar este usuario?')) return;
 
         try {
-            await fetchWithToken(`/usuarios/${id}`, { method: 'DELETE' });
-            fetchUsers();
+            await fetchWithToken(`https://52.23.173.32:8000/usuarios/${id}`, { method: 'DELETE' });
+            fetchUsers(); // Volver a cargar usuarios
         } catch (err) {
-            console.error('Error al eliminar', err);
+            console.error('Error al eliminar:', err);
             setError('Hubo un error al eliminar el usuario');
         }
     };
 
+    // Cerrar sesión
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate('/login'); // Redirigir al login
     };
 
     return (
