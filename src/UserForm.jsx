@@ -10,6 +10,7 @@ const UserForm = () => {
     const navigate = useNavigate();
     const isEditing = Boolean(id);
 
+    // Cargar los datos del usuario si estamos en modo de edición
     useEffect(() => {
         if (isEditing) {
             fetchUser();
@@ -18,7 +19,7 @@ const UserForm = () => {
 
     const fetchUser = async () => {
         try {
-            const data = await fetchWithToken(`/users/${id}`);
+            const data = await fetchWithToken(`https://52.23.173.32:8000/usuarios/${id}`); // URL completa
             setNombre(data.nombre);
             setCorreo(data.correo);
         } catch (err) {
@@ -33,13 +34,15 @@ const UserForm = () => {
 
         try {
             if (isEditing) {
-                await fetchWithToken(`/users/${id}`, {
+                // Actualizar usuario
+                await fetchWithToken(`https://52.23.173.32:8000/usuarios/${id}`, {
                     method: 'PUT',
                     body: JSON.stringify(payload),
                     headers: { 'Content-Type': 'application/json' },
                 });
             } else {
-                await fetchWithToken('/users', {
+                // Crear nuevo usuario
+                await fetchWithToken('https://52.23.173.32:8000/usuarios', {
                     method: 'POST',
                     body: JSON.stringify(payload),
                     headers: { 'Content-Type': 'application/json' },
