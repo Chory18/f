@@ -1,5 +1,9 @@
+import https from 'https';
 const API_BASE_URL = 'https://52.23.173.32'; // Asegúrate de que sea HTTPS válido
-
+// Crear un agente HTTPS que permite certificados autofirmados
+const agent = new https.Agent({  
+    rejectUnauthorized: false  
+});
 // Función de registro
 export const register = async (correo, contraseña, nombre) => {
     const response = await fetch(`${API_BASE_URL}/register`, {
@@ -12,6 +16,8 @@ export const register = async (correo, contraseña, nombre) => {
             contraseña,
             nombre,
         }),
+                agent: agent, // Usar el agente aquí
+
     });
 
     if (!response.ok) {
