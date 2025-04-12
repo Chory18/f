@@ -31,7 +31,6 @@ export const register = async (correo, contraseña, nombre) => {
   }
 };
 
-// Función de login
 export const login = async (correo, contraseña) => {
   try {
     const response = await fetch(`${API_BASE_URL}/token`, {
@@ -40,8 +39,8 @@ export const login = async (correo, contraseña) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: correo, // Asegúrate de que el backend reciba 'username' como correo
-        password: contraseña,
+        username: correo, // Enviamos 'username' en lugar de 'email'
+        password: contraseña, // Enviamos 'password' en lugar de 'contraseña'
       }),
     });
 
@@ -58,7 +57,6 @@ export const login = async (correo, contraseña) => {
     throw error;
   }
 };
-
 // Función para hacer peticiones autenticadas
 export const fetchWithToken = async (endpoint, options = {}) => {
   const token = localStorage.getItem('token');
