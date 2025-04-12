@@ -1,5 +1,3 @@
-import https from 'https';
-
 const API_BASE_URL = 'https://52.23.173.32'; // Asegúrate de que sea HTTPS válido
 
 // Función de registro
@@ -15,9 +13,7 @@ export const register = async (correo, contraseña, nombre) => {
             nombre,
         }),
     });
-   agent: new https.Agent({  
-        rejectUnauthorized: false  
-    })
+
     if (!response.ok) {
         const error = await response.json();
         throw error;
