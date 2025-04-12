@@ -61,7 +61,7 @@ export const fetchWithToken = async (endpoint, options = {}) => {
 
     const headers = {
         'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
+        ...(token && { Authorization: `Bearer ${token}` }), // Agrega el token al header si está presente
         ...options.headers,
     };
 
