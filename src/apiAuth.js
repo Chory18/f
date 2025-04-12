@@ -3,7 +3,7 @@ const API_BASE_URL = 'https://52.23.173.32'; // Asegúrate de que sea HTTPS vál
 // Función de registro
 export const register = async (correo, contraseña, nombre) => {
   try {
-    const response = await fetch('https://52.23.173.32/register', {
+    const response = await fetch(`${API_BASE_URL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,61 +30,69 @@ export const register = async (correo, contraseña, nombre) => {
     throw error;
   }
 };
-};
 
 // Función de login
 export const login = async (correo, contraseña) => {
+  try {
     const response = await fetch(`${API_BASE_URL}/token`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username: correo, // Asegúrate de que el backend reciba 'username' como correo
-            password: contraseña,
-        }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: correo, // Asegúrate de que el backend reciba 'username' como correo
+        password: contraseña,
+      }),
     });
 
     if (!response.ok) {
-        const error = await response.json();
-        throw error;
+      const error = await response.json();
+      throw new Error(error.detail || 'Error en el login');
     }
 
     const data = await response.json();
     localStorage.setItem('token', data.access_token);
     return data;
+  } catch (error) {
+    console.error('Error en login:', error);
+    throw error;
+  }
 };
 
 // Función para hacer peticiones autenticadas
 export const fetchWithToken = async (endpoint, options = {}) => {
-    const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
 
-    const headers = {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-    };
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token && { Authorization: `Bearer ${token}` }),
+    ...options.headers,
+  };
 
-    const config = {
-        ...options,
-        headers,
-    };
+  const config = {
+    ...options,
+    headers,
+  };
 
+  try {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
     if (!response.ok) {
-        const error = await response.json();
-        throw error;
+      const error = await response.json();
+      throw new Error(error.detail || 'Error en la solicitud');
     }
-
-    return response.json();
+    return await response.json();
+  } catch (error) {
+    console.error('Error en fetchWithToken:', error);
+    throw error;
+  }
 };
 
 // Cerrar sesión
 export const logout = () => {
-    localStorage.removeItem('token');
+  localStorage.removeItem('token');
 };
 
 // Verificar si el usuario está autenticado
 export const isAuthenticated = () => {
-    return localStorage.getItem('token') !== null;
+  return localStorage.getItem('token') !== null;
 };
